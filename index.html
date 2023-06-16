@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Voice-to-Text</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .voice-converter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      #voice-icon {
+        width: 100px;
+        height: 100px;
+        cursor: pointer;
+      }
+
+      #text-input {
+        width: 300px;
+        height: 40px;
+        margin-top: 1rem;
+        font-size: 1.2rem;
+        padding: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="voice-converter">
+      <h1>Voice-to-Text Converter</h1>
+      <img
+        src="https://png.pngtree.com/element_our/20200609/ourmid/pngtree-recorded-voice-image_2233800.jpg"
+        alt="Voice Icon"
+        id="voice-icon"
+      />
+      <input type="text" id="text-input" placeholder="Speak here..." />
+    </div>
+
+    <script>
+      const voiceIcon = document.getElementById("voice-icon");
+      const textInput = document.getElementById("text-input");
+      let recognition;
+
+      function startSpeechRecognition() {
+        recognition = new webkitSpeechRecognition();
+        recognition.lang = "en-US";
+
+        recognition.onstart = function () {
+          voiceIcon.src =
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAolBMVEX///8AAAD/AAB7e3vl5eXf399mZmaioqJPT08QEBDr6+v7+/tfX1+BgYH09PS2traWlpYcHBxVVVWHh4c4ODivr6/ExMQnJycXFxdhYWFDQ0Nubm5aWlrPAABbAACpqaliAADV1dUuLi7lAADaAAChAABwAAAsAADGxsa+AAA+AACQkJDjAABsAADHAADxAAAYAABKAAB5AACyAACJAAAlAAAColmbAAAEaUlEQVR4nO2baUPiSBBAYwAZggQ80AFxWMZjdBx1jt3//9d2PQjV6TvgBsN7H5nY1JuE7qruSpIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAdtEZjgat7WcwGnYq6Q32PhKDWMnOp7pDjuZTlONx3eFW4jjYr39Sd6wVOemHCea9uiOtTC8PMjysO841OAwRPKo7yrU48guO645xTcY+wX7dEa6Nb7YZ1R3g2ow8hnXHtwHcgqd1h7cBTp2GrbrD2wAtp+FZ3eG56e3fz4enw2H3+MB+0dk7/gxnWVujszidt75ql54bLhVk9/rok6GSsWRjW3XgEszWM9y3DpyPS7mu+1FKkm557JEhIcvMFULmGLfjFHi4fry6vLx6vP4r2vA/FtM1DG1lQ75vCMNVRjkMby5SwYVR0mmopktRhodt+4WG2b+S4e+ntMTTQ7ShHD7GcOa8MtNKoQqGP6/Kfi/3MdowaVcxPPdcqlV78YZfTH7P/Io1TG7jDQ+8g5YVow1/2wTTtPRr9Bsm57GG7tXthfbn9Qxv7IJp+iXWMA80nC/H1Kf+fq6WD4tyxJGGv1yCafrNZtg6mj0zGajr9PImSkPDf2tBqVLIu6/L/GRYfKRPppGG2iSq8mQzFAmHEuVtnKEan9zDfSt15/rfxBn+cQum6bXfUFmv+1GGSsVeyrheNiwM2V2c4TefYJoGGO7JFfssxlAGl5f/8axfTFzVDe/8hn8CDOVzehBhqMxH+i7u1JSzRRr6BeVNtBrKRfs8wvBWXDW0X7aG4d8hhjd+Q2WS1Q17JYr1TS4LpUVvQ4YXfr80vfMbDsQ/7GuGOm9/Jvd3F8GCUYYhgmLBsBrKrZNpuOFEfBSxCRhh+E+Q4eqHaDP8qkcfZKjf+k0bWlNule8ew8Nc/4ogw3vxkVI/b8zQmZKuKJJTaVjM7dO58hWjCEO5yESc+EUYOqoKSVFhSMM8e0HbXdmLMNzue2hhmUY24Hdopsi8GjCXmik2TqVht8zyRm/3emhk9WMKy9q2Oqcx0Bbn5w3ISzVypZRrQG2hcasM3ID6UEdpI2tAjf86qUzl6LKNpdo+jTze3JZ9mq5l9I+z13YprzVl3nK/UzxSvv3SIod5//3S725D637p0vBEjr86KfUaLg95t3fPu6ie5HMWfjJTGG7vucWqPpRfWBxHhBtu7dnTylB5zpZ5W4Sh5/ywvVfmfzo/FDW+3PIOPZmRhs4zYEMyV+kM+EabUi8N59y2fZqF+HxcwdB+jp/NDMG6DB29GA9KFv7oPceXhj35HbMww0lpbGMvhrnBydWL4e6nee7F+PHj6s7aiyH6aTK180J0z7w+J55+mnamt7lupJ/m4/REmZ7ON9wraPP72prfm9j8/tId6BFufp9383v1d+B9ix14Z2YH3ntq/rtrSfPfP0x24B3SpPnvAb9KNvtdbgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHhH/gUZlVw0gUgB9AAAAABJRU5ErkJggg==";
+          console.log("Speech recognition started");
+        };
+
+        recognition.onresult = function (event) {
+          const transcript = event.results[0][0].transcript;
+          textInput.value += transcript;
+          console.log("Result:", transcript);
+        };
+
+        recognition.onend = function () {
+          voiceIcon.src =
+            "https://png.pngtree.com/element_our/20200609/ourmid/pngtree-recorded-voice-image_2233800.jpg";
+          console.log("Speech recognition ended");
+        };
+
+        recognition.start();
+      }
+
+      voiceIcon.addEventListener("click", startSpeechRecognition);
+    </script>
+  </body>
+</html>
